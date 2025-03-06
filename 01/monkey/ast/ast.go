@@ -23,6 +23,36 @@ type Expression interface {
 type Program struct {
 	Statements []Statement
 }
+type Identifier struct {
+	Token token.Token
+	Value string
+}
+
+type LetStatement struct {
+	Token token.Token
+	Name  *Identifier
+	Value Expression
+}
+
+type ReturnStatement struct {
+	Token       token.Token
+	ReturnValue Expression
+}
+
+type IntegerLiteral struct {
+	Token token.Token
+	Value int64
+}
+
+type PrefixExpression struct {
+	Token    token.Token
+	Operator string
+	Right    Expression
+}
+type ExpressionStatement struct {
+	Token      token.Token
+	Expression Expression
+}
 
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {
@@ -39,12 +69,6 @@ func (p *Program) String() string {
 		out.WriteString(s.String())
 	}
 	return out.String()
-}
-
-type LetStatement struct {
-	Token token.Token
-	Name  *Identifier
-	Value Expression
 }
 
 func (ls *LetStatement) statementNode() {}
@@ -67,22 +91,12 @@ func (ls *LetStatement) String() string {
 
 }
 
-type Identifier struct {
-	Token token.Token
-	Value string
-}
-
 func (i *Identifier) expressionNode() {}
 func (i *Identifier) TokenLiteral() string {
 	return i.Token.Literal
 }
 func (i *Identifier) String() string {
 	return i.Value
-}
-
-type ReturnStatement struct {
-	Token       token.Token
-	ReturnValue Expression
 }
 
 func (rs *ReturnStatement) statementNode() {}
@@ -100,11 +114,6 @@ func (rs *ReturnStatement) String() string {
 	return out.String()
 }
 
-type ExpressionStatement struct {
-	Token      token.Token
-	Expression Expression
-}
-
 func (es *ExpressionStatement) statementNode() {}
 func (es *ExpressionStatement) TokenLiteral() string {
 	return es.Token.Literal
@@ -117,23 +126,12 @@ func (es *ExpressionStatement) String() string {
 	return ""
 }
 
-type IntegerLiteral struct {
-	Token token.Token
-	Value int64
-}
-
 func (il *IntegerLiteral) expressionNode() {}
 func (il *IntegerLiteral) TokenLiteral() string {
 	return il.Token.Literal
 }
 func (il *IntegerLiteral) String() string {
 	return il.Token.Literal
-}
-
-type PrefixExpression struct {
-	Token    token.Token
-	Operator string
-	Right    Expression
 }
 
 func (pe *PrefixExpression) expressionNode() {}

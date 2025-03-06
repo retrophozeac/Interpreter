@@ -18,6 +18,11 @@ type Parser struct {
 	infixParseFns  map[token.TokenType]infixParseFn
 }
 
+type (
+	prefixParseFn func() ast.Expression
+	infixParseFn  func(ast.Expression) ast.Expression
+)
+
 func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
 	p.prefixParseFns[tokenType] = fn
 }
@@ -127,11 +132,6 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	}
 	return stmt
 }
-
-type (
-	prefixParseFn func() ast.Expression
-	infixParseFn  func(ast.Expression) ast.Expression
-)
 
 const (
 	_ int = iota
